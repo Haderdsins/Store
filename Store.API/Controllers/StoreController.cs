@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Store.BLL.Store;
+using Store.BLL.Models;
+using Store.BLL.Services.BatchOfProducts;
+using Store.BLL.Services.Products;
+using Store.BLL.Services.Stores;
 
 namespace Store.API.Controllers;
 
@@ -8,27 +11,50 @@ namespace Store.API.Controllers;
 public class StoreController : ControllerBase
 {
     private readonly IStoreService _storeService;
+    private readonly IBatchOfProduct _batchOfProductService;
 
-    public StoreController(IStoreService storeService)
+    private readonly IProductService _productService;
+    //принцип диайа
+    public StoreController(IStoreService storeService, IBatchOfProduct batchOfProductService, IProductService productService)
     {
         _storeService = storeService;
+        _batchOfProductService = batchOfProductService;
+        _productService = productService;
     }
     
     
-    private static readonly string[] Summaries = new[]
+    /// <summary>
+    /// Создание магазина
+    /// </summary>
+    /// <param name="createStoreModel"></param>
+    [HttpPost]
+    public void CreateStore(CreateStoreModel createStoreModel)
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        _storeService.Create(createStoreModel);
+    }
+    
+    
+    
+    /// <summary>
+    /// Создание позиции продукта
+    /// </summary>
+    /// <param name="createProductModel"></param>
+    [HttpPost]
+    public void CreateProduct(CreateProductModel createProductModel)
+    {
+        _productService.CreateProduct(createProductModel);
+    }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+
+    /// <summary>
+    /// Создание партии продуктов в магазине
+    /// </summary>
+    [HttpPost]
+    public void CreateBatchOfProduct(CreateBatchOfProductModel createBatchOfProductModel)
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+        _batchOfProductService.CreateBatchOfProduct(createBatchOfProductModel);
     }
+
+
+
 }
