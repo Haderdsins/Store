@@ -27,7 +27,7 @@ public class StoreController : ControllerBase
     /// Создание магазина
     /// </summary>
     /// <param name="createStoreModel"></param>
-    [HttpPost]
+    [HttpPost("CreateStore")]
     public void CreateStore(CreateStoreModel createStoreModel)
     {
         _storeService.Create(createStoreModel);
@@ -36,10 +36,10 @@ public class StoreController : ControllerBase
     
     
     /// <summary>
-    /// Создание позиции продукта
+    /// Создание продукта
     /// </summary>
     /// <param name="createProductModel"></param>
-    [HttpPost]
+    [HttpPost("CreateProduct")]
     public void CreateProduct(CreateProductModel createProductModel)
     {
         _productService.CreateProduct(createProductModel);
@@ -47,9 +47,10 @@ public class StoreController : ControllerBase
 
 
     /// <summary>
-    /// Создание партии продуктов в магазине
+    /// Создание позиции продукта в магазине
     /// </summary>
-    [HttpPost]
+    /// <param name="createBatchOfProductModel"></param>
+    [HttpPost("CreateBatchOfProduct")]
     public void CreateBatchOfProduct(CreateBatchOfProductModel createBatchOfProductModel)
     {
         _batchOfProductService.CreateBatchOfProduct(createBatchOfProductModel);
