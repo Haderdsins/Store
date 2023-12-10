@@ -57,6 +57,7 @@ public class StoreController : ControllerBase
     public void CreateBatchOfProduct(CreateBatchOfProductModel createBatchOfProductModel)
     {
         _batchOfProductServiceService.CreateBatchOfProduct(createBatchOfProductModel);
+        
     }
 
     /// <summary>
@@ -68,7 +69,6 @@ public class StoreController : ControllerBase
     public IActionResult FoundStoreWhereMinPriceProduct(int productId)
     {
         var result = _storeWhereMinPriceProduct.FoundStoreWhereMinPriceProduct(productId);
-    
         // Возвращение результата клиенту, например, в форме JSON
         return Ok(result);
     }
