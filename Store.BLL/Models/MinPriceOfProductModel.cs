@@ -2,5 +2,5 @@
 
 public class MinPriceOfProductModel
 {
-    public string ProductId { get; set; }//Название магазина
+    public int ProductId { get; set; }//Название магазина
 }

@@ -1,8 +1,8 @@
-﻿using Store.BLL.Models;
+﻿using Store.DAL.Models;
 
 namespace Store.BLL.Services.MinPriceProducts;
 
 public interface IStoreWhereMinPriceProductService
 {
-    void FoundStoreWhereMinPriceProduct(MinPriceOfProductModel model);
+    Shop FoundStoreWhereMinPriceProduct(int productId);
 }

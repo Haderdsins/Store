@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Store.BLL.Models;
 using Store.BLL.Services.BatchOfProducts;
+using Store.BLL.Services.MinPriceProducts;
 using Store.BLL.Services.Products;
 using Store.BLL.Services.Stores;
 
@@ -13,12 +14,15 @@ public class StoreController : ControllerBase
     private readonly IStoreService _storeService;
     private readonly IBatchOfProductService _batchOfProductServiceService;
     private readonly IProductService _productService;
+
+    private readonly IStoreWhereMinPriceProductService _storeWhereMinPriceProduct;
     //принцип диайа
-    public StoreController(IStoreService storeService, IBatchOfProductService batchOfProductServiceService, IProductService productService)
+    public StoreController(IStoreService storeService, IBatchOfProductService batchOfProductServiceService, IProductService productService, IStoreWhereMinPriceProductService storeWhereMinPriceProduct)
     {
         _storeService = storeService;
         _batchOfProductServiceService = batchOfProductServiceService;
         _productService = productService;
+        _storeWhereMinPriceProduct = storeWhereMinPriceProduct;
     }
     
     
@@ -54,8 +58,23 @@ public class StoreController : ControllerBase
     {
         _batchOfProductServiceService.CreateBatchOfProduct(createBatchOfProductModel);
     }
+
+    /// <summary>
+    /// Найти магазин с минимальным ценником на выбранный продукт
+    /// </summary>
+    /// <param name="minPriceOfProductModel"></param>
+    /// <param name="productId">Идентификатор продукта</param>
+    [HttpGet("FoundStoreWhereMinPriceProduct")]
+    public IActionResult FoundStoreWhereMinPriceProduct(int productId)
+    {
+        var result = _storeWhereMinPriceProduct.FoundStoreWhereMinPriceProduct(productId);
     
-    
+        // Возвращение результата клиенту, например, в форме JSON
+        return Ok(result);
+    }
+
+
+
 
 
 

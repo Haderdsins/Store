@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Store.BLL.Services.BatchOfProducts;
+using Store.BLL.Services.MinPriceProducts;
 using Store.BLL.Services.Products;
 using Store.BLL.Services.Stores;
 using Store.DAL.Database;
@@ -21,6 +22,8 @@ builder.Services.AddScoped<IStoreService, StoreService>();
 
 builder.Services.AddScoped<IBatchOfProductService, BatchOfProductService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IStoreWhereMinPriceProductService ,StoreWhereMinPriceProductService>();
+
 
 
 builder.Services.AddControllers();

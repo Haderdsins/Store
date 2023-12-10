@@ -23,5 +23,6 @@ public class BatchOfProductService : IBatchOfProductService
         // logic to add database
         _dbContext.Items.Add(omgitem);
         _dbContext.SaveChanges();
+        
     }
 }
