@@ -4,11 +4,11 @@ using Store.DAL.Models;
 
 namespace Store.BLL.Services.BatchOfProducts;
 
-public class BatchOfProduct
+public class BatchOfProductService : IBatchOfProductService
 {
     private readonly StoreDbContext _dbContext;
     
-    public BatchOfProduct(StoreDbContext dbContext)
+    public BatchOfProductService(StoreDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -22,5 +22,6 @@ public class BatchOfProduct
         
         // logic to add database
         _dbContext.Items.Add(omgitem);
+        _dbContext.SaveChanges();
     }
 }

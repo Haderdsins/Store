@@ -2,5 +2,7 @@
 
 public class CreateProductModel
 {
-    public string Name { get; set; }//Название магазина
+    public string Name { get; set; }//название продукта
+
+
 }

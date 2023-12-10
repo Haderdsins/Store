@@ -16,8 +16,9 @@ public class ProductService : IProductService
     {
         var product = new Product();
         product.Name = model.Name;
-
+        
         // logic to add database
         _dbContext.Products.Add(product);
+        _dbContext.SaveChanges();
     }
 }

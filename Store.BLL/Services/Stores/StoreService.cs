@@ -21,6 +21,7 @@ public class StoreService : IStoreService
 
         // logic to add database
         _dbContext.Stores.Add(shop);
+        _dbContext.SaveChanges();
         
     }
     

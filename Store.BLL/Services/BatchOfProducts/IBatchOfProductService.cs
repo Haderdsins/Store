@@ -2,7 +2,7 @@
 
 namespace Store.BLL.Services.BatchOfProducts;
 
-public interface IBatchOfProduct
+public interface IBatchOfProductService
 {
     void CreateBatchOfProduct(CreateBatchOfProductModel model);
-}
+}   

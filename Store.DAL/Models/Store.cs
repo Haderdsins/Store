@@ -8,6 +8,6 @@ public class Shop
     
     public string Address { get; set; } //Адрес магазина
 
-    public List<Product> Products { get; set; } = null!; //Список продуктов в магазине
+    //public List<Product> Products { get; set; } = null!; //Список продуктов в магазине
     
 }

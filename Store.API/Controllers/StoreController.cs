@@ -11,14 +11,13 @@ namespace Store.API.Controllers;
 public class StoreController : ControllerBase
 {
     private readonly IStoreService _storeService;
-    private readonly IBatchOfProduct _batchOfProductService;
-
+    private readonly IBatchOfProductService _batchOfProductServiceService;
     private readonly IProductService _productService;
     //принцип диайа
-    public StoreController(IStoreService storeService, IBatchOfProduct batchOfProductService, IProductService productService)
+    public StoreController(IStoreService storeService, IBatchOfProductService batchOfProductServiceService, IProductService productService)
     {
         _storeService = storeService;
-        _batchOfProductService = batchOfProductService;
+        _batchOfProductServiceService = batchOfProductServiceService;
         _productService = productService;
     }
     
@@ -53,8 +52,10 @@ public class StoreController : ControllerBase
     [HttpPost("CreateBatchOfProduct")]
     public void CreateBatchOfProduct(CreateBatchOfProductModel createBatchOfProductModel)
     {
-        _batchOfProductService.CreateBatchOfProduct(createBatchOfProductModel);
+        _batchOfProductServiceService.CreateBatchOfProduct(createBatchOfProductModel);
     }
+    
+    
 
 
 

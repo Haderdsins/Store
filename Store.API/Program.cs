@@ -1,27 +1,42 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Store.BLL.Services.BatchOfProducts;
+using Store.BLL.Services.Products;
+using Store.BLL.Services.Stores;
 using Store.DAL.Database;
 
-var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+// ...
+
+// Предполагается, что у вас есть реализация IStoreService, например, StoreService
+builder.Services.AddScoped<IStoreService, StoreService>();
+
+// ...
+
+//var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddSingleton<StoreDbContext>(options => options.UseNpgsql(connection));
+
+
+builder.Services.AddScoped<IBatchOfProductService, BatchOfProductService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<StoreDbContext>(opt =>
 {
     opt.UseNpgsql("Host=localhost;Port=5432;Database=store_db;Username=postgres;Password=postgres");
 });
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v9999",
-        Title = "Магазин всем магазинов.API",
-        Description = "Магазин 90-ые",
+        Title = "Магазин 90-ые",
+        Description = "Мы крышуем все магазины",
         Contact = new OpenApiContact
         {
             Name = "Васкин Максим Вадимович",
@@ -34,11 +49,8 @@ builder.Services.AddSwaggerGen(options =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath);
 });
-//var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-//builder.Services.AddSingleton<StoreDbContext>(options => options.UseNpgsql(connection));
-var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
