@@ -1,4 +1,5 @@
 ﻿using Store.BLL.Models;
+using Store.BLL.Models.Create;
 using Store.DAL.Database;
 using Store.DAL.Models;
 
@@ -24,5 +25,21 @@ public class StoreService : IStoreService
         _dbContext.SaveChanges();
         
     }
+    public void Delete(int StoreId)
+    {
+        var shopToDelete = _dbContext.Stores.Find(StoreId);
+
+        if (shopToDelete != null)
+        {
+            _dbContext.Stores.Remove(shopToDelete);
+            _dbContext.SaveChanges();
+        }
+        else
+        {
+            // Обработка случая, когда магазин с указанным ID не найден
+            throw new ArgumentException("Store not found.");
+        }
+    }
+
     
 }

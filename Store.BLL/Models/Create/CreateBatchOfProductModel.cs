@@ -1,4 +1,4 @@
-﻿namespace Store.BLL.Models;
+﻿namespace Store.BLL.Models.Create;
 
 public class CreateBatchOfProductModel
 {

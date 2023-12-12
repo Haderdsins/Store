@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Store.BLL.Models;
+using Store.BLL.Models.Create;
+using Store.BLL.Models.Delete;
+using Store.BLL.Models.Other;
 using Store.BLL.Services.BatchOfProducts;
-using Store.BLL.Services.MinPriceProducts;
-using Store.BLL.Services.Products;
-using Store.BLL.Services.Stores;
-
+using Store.DAL.Models;
 
 namespace Store.API.Controllers
 {
@@ -13,12 +12,13 @@ namespace Store.API.Controllers
   public class ItemController : ControllerBase
   {
     private readonly IBatchOfProductService _batchOfProductServiceService;
-    private readonly IStoreWhereMinPriceProductService _storeWhereMinPriceProduct;
-    
-    public ItemController(IBatchOfProductService batchOfProductServiceService, IStoreWhereMinPriceProductService storeWhereMinPriceProduct)
+    private readonly IBatchOfProductService _storeWhereMinPriceProductService;
+    private readonly IBatchOfProductService _getItemsForAmountService;
+    public ItemController(IBatchOfProductService batchOfProductServiceService, IBatchOfProductService storeWhereMinPriceProduct, IBatchOfProductService getItemsForAmount, IBatchOfProductService getItemsForAmountService)
     {
       _batchOfProductServiceService = batchOfProductServiceService;
-      _storeWhereMinPriceProduct = storeWhereMinPriceProduct;
+      _storeWhereMinPriceProductService = storeWhereMinPriceProduct;
+      _getItemsForAmountService = getItemsForAmountService;
     }
     /// <summary>
     /// Создание позиции продукта в магазине
@@ -39,9 +39,29 @@ namespace Store.API.Controllers
     [HttpGet("FoundStoreWhereMinPriceProduct")]
     public IActionResult FoundStoreWhereMinPriceProduct(int productId)
     {
-      var result = _storeWhereMinPriceProduct.FoundStoreWhereMinPriceProduct(productId);
+      var result = _storeWhereMinPriceProductService.FoundStoreWhereMinPriceProduct(productId);
       // Возвращение результата клиенту, например, в форме JSON
       return Ok(result);
+    }
+    
+    /// <summary>
+    /// Удаление позиции продукта из магазина
+    /// </summary>
+    /// <param name="deleteProductModel"></param>
+    [HttpDelete("DeleteItem")]
+    public void Delete(DeleteBatchOfProductModel deleteBatchOfProductModel)
+    {
+      _batchOfProductServiceService.Delete(deleteBatchOfProductModel.ItemId);
+    }
+    /// <summary>
+    /// Понять какие товары можно купить в магазине на некоторую сумму
+    /// </summary>
+    /// <param name="deleteBatchOfProductModel"></param>
+    [HttpGet("FountItemsInPrice")]
+    public ActionResult<IEnumerable<(OmgItem item, int quantity)>> GetItemsInPrice([FromQuery] int productId, [FromQuery] decimal amount)
+    {
+      var itemsForAmount = _getItemsForAmountService.GetItemsForAmount(productId, amount);
+      return Ok(itemsForAmount);
     }
   }  
 }

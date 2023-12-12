@@ -1,10 +1,7 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using Store.BLL.Models;
-using Store.BLL.Services.BatchOfProducts;
-using Store.BLL.Services.MinPriceProducts;
+﻿using Microsoft.AspNetCore.Mvc;
+using Store.BLL.Models.Create;
+using Store.BLL.Models.Delete;
 using Store.BLL.Services.Products;
-using Store.BLL.Services.Stores;
 
 namespace Store.API.Controllers
 {
@@ -25,6 +22,15 @@ namespace Store.API.Controllers
         public void CreateProduct(CreateProductModel createProductModel)
         {
             _productService.CreateProduct(createProductModel);
+        }
+        /// <summary>
+        /// Удаление продукта
+        /// </summary>
+        /// <param name="deleteProductModel"></param>
+        [HttpDelete("DeleteProduct")]
+        public void Delete(DeleteProductModel deleteProductModel)
+        {
+            _productService.Delete(deleteProductModel.ProductId);
         }
     }
 }

@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Store.BLL.Models;
-using Store.BLL.Services.BatchOfProducts;
-using Store.BLL.Services.MinPriceProducts;
-using Store.BLL.Services.Products;
+using Store.BLL.Models.Create;
+using Store.BLL.Models.Delete;
 using Store.BLL.Services.Stores;
 
 namespace Store.API.Controllers;
@@ -12,17 +10,12 @@ namespace Store.API.Controllers;
 public class StoreController : ControllerBase
 {
     private readonly IStoreService _storeService;
-    private readonly IBatchOfProductService _batchOfProductServiceService;
 
-    private readonly IStoreWhereMinPriceProductService _storeWhereMinPriceProduct;
     //принцип диайа
-    public StoreController(IStoreService storeService, IBatchOfProductService batchOfProductServiceService, IStoreWhereMinPriceProductService storeWhereMinPriceProduct)
+    public StoreController(IStoreService storeService)
     {
         _storeService = storeService;
-        _batchOfProductServiceService = batchOfProductServiceService;
-        _storeWhereMinPriceProduct = storeWhereMinPriceProduct;
     }
-    
     
     /// <summary>
     /// Создание магазина
@@ -34,4 +27,13 @@ public class StoreController : ControllerBase
         _storeService.Create(createStoreModel);
     }
     
+    /// <summary>
+    /// Удаление магазина
+    /// </summary>
+    /// <param name="deleteStoreModel"></param>
+    [HttpDelete("DeleteStore")]
+    public void DeleteStore(DeleteStoreModel deleteStoreModel)
+    {
+        _storeService.Delete(deleteStoreModel.StoreId);
+    }
 }

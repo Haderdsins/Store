@@ -2,27 +2,19 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Store.BLL.Services.BatchOfProducts;
-using Store.BLL.Services.MinPriceProducts;
 using Store.BLL.Services.Products;
 using Store.BLL.Services.Stores;
 using Store.DAL.Database;
 
 
 var builder = WebApplication.CreateBuilder(args);
-// ...
 
-// Предполагается, что у вас есть реализация IStoreService, например, StoreService
+
+
 builder.Services.AddScoped<IStoreService, StoreService>();
-
-// ...
-
-//var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-//builder.Services.AddSingleton<StoreDbContext>(options => options.UseNpgsql(connection));
-
-
 builder.Services.AddScoped<IBatchOfProductService, BatchOfProductService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IStoreWhereMinPriceProductService, StoreWhereMinPriceProductService>();
+
 
 
 
