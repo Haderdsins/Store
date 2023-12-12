@@ -22,12 +22,11 @@ builder.Services.AddScoped<IStoreService, StoreService>();
 
 builder.Services.AddScoped<IBatchOfProductService, BatchOfProductService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IStoreWhereMinPriceProductService ,StoreWhereMinPriceProductService>();
+builder.Services.AddScoped<IStoreWhereMinPriceProductService, StoreWhereMinPriceProductService>();
 
 
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<StoreDbContext>(opt =>
 {
     opt.UseNpgsql("Host=localhost;Port=5432;Database=store_db;Username=postgres;Password=postgres");
