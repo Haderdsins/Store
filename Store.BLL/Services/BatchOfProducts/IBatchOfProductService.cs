@@ -1,5 +1,6 @@
 ﻿using Store.BLL.Models.Create;
 using Store.BLL.Models.Get;
+using Store.BLL.Models.Update;
 using Store.DAL.Models;
 
 namespace Store.BLL.Services.BatchOfProducts;
@@ -12,4 +13,6 @@ public interface IBatchOfProductService
     Shop FoundStoreWhereMinPriceProduct(int productId);
     
     GetItemsForAmountModel GetItemsForAmount(decimal amount);
+    
+    void Update(int itemId, UpdateItemModel model);
 }   

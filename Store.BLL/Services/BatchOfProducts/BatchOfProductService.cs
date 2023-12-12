@@ -1,5 +1,6 @@
 ﻿using Store.BLL.Models.Create;
 using Store.BLL.Models.Get;
+using Store.BLL.Models.Update;
 using Store.DAL.Database;
 using Store.DAL.Models;
 
@@ -38,6 +39,25 @@ public class BatchOfProductService : IBatchOfProductService
         else
         {
             // Обработка случая, когда магазин с указанным ID не найден
+            throw new ArgumentException("Item not found.");
+        }
+    }
+    public void Update(int itemId, UpdateItemModel model)
+    {
+        var itemToUpdate = _dbContext.Items.Find(itemId);
+
+        if (itemToUpdate != null)
+        {
+            // Обновление атрибутов продукта
+            itemToUpdate.ProductId = model.ProductId; // Пример, добавьте другие атрибуты, которые необходимо обновить
+            itemToUpdate.StoreId = model.StoreId;
+            itemToUpdate.Count = model.Count;
+            itemToUpdate.Price = model.Price;
+            _dbContext.SaveChanges();
+        }
+        else
+        {
+            // Обработка случая, когда продукт с указанным ID не найден
             throw new ArgumentException("Item not found.");
         }
     }
@@ -82,5 +102,4 @@ public class BatchOfProductService : IBatchOfProductService
 
         return new GetItemsForAmountModel(result);
     }
-//, result.Sum(item => item.Quantity)
 }

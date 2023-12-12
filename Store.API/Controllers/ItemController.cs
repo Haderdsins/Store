@@ -2,6 +2,7 @@
 using Store.BLL.Models.Create;
 using Store.BLL.Models.Delete;
 using Store.BLL.Models.Other;
+using Store.BLL.Models.Update;
 using Store.BLL.Services.BatchOfProducts;
 using Store.DAL.Models;
 
@@ -62,6 +63,16 @@ namespace Store.API.Controllers
     {
       var itemsForAmount = _getItemsForAmountService.GetItemsForAmount(amount);
       return Ok(itemsForAmount);
+    }
+    
+    /// <summary>
+    /// Обновление продукта в магазине
+    /// </summary>
+    /// <param name="updateProductModel"></param>
+    [HttpPut("UpdateProduct")]
+    public void Update(UpdateItemModel updateProductModel)
+    {
+      _batchOfProductServiceService.Update(updateProductModel.StoreId, updateProductModel);
     }
   }  
 }

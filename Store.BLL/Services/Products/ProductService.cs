@@ -1,5 +1,6 @@
 ﻿using Store.BLL.Models;
 using Store.BLL.Models.Create;
+using Store.BLL.Models.Update;
 using Store.DAL.Database;
 using Store.DAL.Models;
 
@@ -35,6 +36,23 @@ public class ProductService : IProductService
         else
         {
             // Обработка случая, когда магазин с указанным ID не найден
+            throw new ArgumentException("Product not found.");
+        }
+    }
+    public void Update(int productId, UpdateProductModel model)
+    {
+        var productToUpdate = _dbContext.Products.Find(productId);
+
+        if (productToUpdate != null)
+        {
+            // Обновление атрибутов продукта
+            productToUpdate.Name = model.Name; // Пример, добавьте другие атрибуты, которые необходимо обновить
+
+            _dbContext.SaveChanges();
+        }
+        else
+        {
+            // Обработка случая, когда продукт с указанным ID не найден
             throw new ArgumentException("Product not found.");
         }
     }

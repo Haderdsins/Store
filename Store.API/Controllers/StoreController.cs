@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Store.BLL.Models.Create;
 using Store.BLL.Models.Delete;
+using Store.BLL.Models.Update;
 using Store.BLL.Services.Stores;
 
 namespace Store.API.Controllers;
@@ -35,5 +36,15 @@ public class StoreController : ControllerBase
     public void DeleteStore(DeleteStoreModel deleteStoreModel)
     {
         _storeService.Delete(deleteStoreModel.StoreId);
+    }
+    
+    /// <summary>
+    /// Обновление магазина
+    /// </summary>
+    /// <param name="deleteProductModel"></param>
+    [HttpPut("UpdateStore")]
+    public void Update(UpdateStoreModel updateStoreModel)
+    {
+        _storeService.Update(updateStoreModel.StoreId, updateStoreModel);
     }
 }
