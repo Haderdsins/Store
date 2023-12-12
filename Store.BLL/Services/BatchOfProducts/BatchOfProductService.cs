@@ -59,15 +59,15 @@ public class BatchOfProductService : IBatchOfProductService
         throw new Exception("Product not found or no store has the product.");
     }
 //TODO: добавить в получаемые переменнные productId, имзенить принцип расчета quantity, проверку на ноли и округление
-    public GetItemsForAmountModel GetItemsForAmount(int productId, decimal amount)
+    public GetItemsForAmountModel GetItemsForAmount(decimal amount)
     {
         // Получаем все товары, цена которых не превышает заданную сумму и принадлежат указанному продукту
         var affordableItems = _dbContext.Items
-            .Where(item => item.Price <= amount && item.ProductId == productId)
+            .Where(item => item.Price <= amount)
             .OrderBy(item => item.Price)
             .ToList();
 
-        var result = new List<(OmgItem item, int quantity)>();
+        var result = new List<AffordableItemModel>();
 
         // Рассчитываем, сколько товаров можно купить для заданной суммы
         foreach (var item in affordableItems)
@@ -76,11 +76,11 @@ public class BatchOfProductService : IBatchOfProductService
             if (item.Price != 0)
             {
                 int quantity = (int)Math.Floor(amount / item.Price); // Изменение принципа расчета
-                result.Add((item, quantity));
+                result.Add(new AffordableItemModel { Item = item, Quantity = quantity });
             }
         }
 
-        return new GetItemsForAmountModel(result.Select(item => item.item).ToList(), result.Sum(item => item.quantity));
+        return new GetItemsForAmountModel(result);
     }
-
+//, result.Sum(item => item.Quantity)
 }

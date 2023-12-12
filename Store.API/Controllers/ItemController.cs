@@ -58,9 +58,9 @@ namespace Store.API.Controllers
     /// </summary>
     /// <param name="deleteBatchOfProductModel"></param>
     [HttpGet("FountItemsInPrice")]
-    public ActionResult<IEnumerable<(OmgItem item, int quantity)>> GetItemsInPrice([FromQuery] int productId, [FromQuery] decimal amount)
+    public ActionResult<IEnumerable<AffordableItemModel>> GetItemsInPrice(decimal amount)
     {
-      var itemsForAmount = _getItemsForAmountService.GetItemsForAmount(productId, amount);
+      var itemsForAmount = _getItemsForAmountService.GetItemsForAmount(amount);
       return Ok(itemsForAmount);
     }
   }  

@@ -4,12 +4,12 @@ namespace Store.BLL.Models.Get;
 
 public class GetItemsForAmountModel
 {
-    public List<OmgItem> Items { get; set; }
-    public int Quantity { get; set; }
+    public List<AffordableItemModel> Items { get; set; }
+    //public int TotalQuantity { get; set; }
 
-    public GetItemsForAmountModel(List<OmgItem> items, int quantity)
+    public GetItemsForAmountModel(List<AffordableItemModel> items)
     {
         Items = items;
-        Quantity = quantity;
+        //TotalQuantity = totalQuantity;
     }
 }

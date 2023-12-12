@@ -11,5 +11,5 @@ public interface IBatchOfProductService
     void Delete(int itemId);
     Shop FoundStoreWhereMinPriceProduct(int productId);
     
-    GetItemsForAmountModel GetItemsForAmount(int productId, decimal amount);
+    GetItemsForAmountModel GetItemsForAmount(decimal amount);
 }   
