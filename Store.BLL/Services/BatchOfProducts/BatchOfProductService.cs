@@ -49,7 +49,7 @@ public class BatchOfProductService : IBatchOfProductService
         if (itemToUpdate != null)
         {
             // Обновление атрибутов продукта
-            itemToUpdate.ProductId = model.ProductId; // Пример, добавьте другие атрибуты, которые необходимо обновить
+            itemToUpdate.ProductId = model.ProductId; 
             itemToUpdate.StoreId = model.StoreId;
             itemToUpdate.Count = model.Count;
             itemToUpdate.Price = model.Price;
@@ -101,5 +101,34 @@ public class BatchOfProductService : IBatchOfProductService
         }
 
         return new GetItemsForAmountModel(result);
+    }
+    
+    public decimal PurchaseItems(Dictionary<int, int> itemQuantities)
+    {
+        decimal totalCost = 0;
+
+        foreach (var itemQuantity in itemQuantities)
+        {
+            int itemId = itemQuantity.Key;
+            int quantityToBuy = itemQuantity.Value;
+
+            var item = _dbContext.Items.FirstOrDefault(i => i.Id == itemId && i.Count >= quantityToBuy);
+
+            if (item != null)
+            {
+                item.Count -= quantityToBuy;
+                totalCost += item.Price * quantityToBuy;
+            }
+            else
+            {
+                // Если товара не хватает, возможно, нужно бросить исключение или вернуть специальный результат
+                // в зависимости от требований вашего приложения.
+                throw new InvalidOperationException($"Not enough quantity for item with ID {itemId}");
+            }
+        }
+
+        _dbContext.SaveChanges();
+
+        return totalCost;
     }
 }

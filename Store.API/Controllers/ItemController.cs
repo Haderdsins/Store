@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Store.BLL.Models.Cart;
 using Store.BLL.Models.Create;
 using Store.BLL.Models.Delete;
 using Store.BLL.Models.Other;
@@ -73,6 +74,26 @@ namespace Store.API.Controllers
     public void Update(UpdateItemModel updateProductModel)
     {
       _batchOfProductServiceService.Update(updateProductModel.StoreId, updateProductModel);
+    }
+    
+    /// <summary>
+    /// Купить партию товаров в магазине
+    /// </summary>
+    /// <param name="cartItems"></param>
+    /// <returns></returns>
+    [HttpPost("PurchaseItems")]
+    public IActionResult PurchaseItems([FromBody] List<CartItemModel> cartItems)
+    {
+      try
+      {
+        Dictionary<int, int> itemQuantities = cartItems.ToDictionary(item => item.ProductId, item => item.Count);
+        decimal totalCost = _batchOfProductServiceService.PurchaseItems(itemQuantities);
+        return Ok($"Purchase successful. Total cost: {totalCost}");
+      }
+      catch (Exception ex)
+      {
+        return BadRequest($"Purchase failed. Reason: {ex.Message}");
+      }
     }
   }  
 }
