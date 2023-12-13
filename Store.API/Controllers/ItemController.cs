@@ -88,11 +88,11 @@ namespace Store.API.Controllers
       {
         Dictionary<int, int> itemQuantities = cartItems.ToDictionary(item => item.ProductId, item => item.Count);
         decimal totalCost = _batchOfProductServiceService.PurchaseItems(itemQuantities);
-        return Ok($"Purchase successful. Total cost: {totalCost}");
+        return Ok($"Покупка совершена, денежный итог: {totalCost}");
       }
       catch (Exception ex)
       {
-        return BadRequest($"Purchase failed. Reason: {ex.Message}");
+        return BadRequest($"Ой, что то пошло не так, продавец сказал только одну фразу: {ex.Message}");
       }
     }
   }  

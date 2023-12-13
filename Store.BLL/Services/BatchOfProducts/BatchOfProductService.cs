@@ -121,9 +121,8 @@ public class BatchOfProductService : IBatchOfProductService
             }
             else
             {
-                // Если товара не хватает, возможно, нужно бросить исключение или вернуть специальный результат
-                // в зависимости от требований вашего приложения.
-                throw new InvalidOperationException($"Not enough quantity for item with ID {itemId}");
+
+                throw new InvalidOperationException($"На складах недостаточно товара с id: {itemId}");
             }
         }
 
