@@ -1,5 +1,6 @@
 ﻿using Store.BLL.Models;
 using Store.BLL.Models.Create;
+using Store.BLL.Models.Get;
 using Store.BLL.Models.Update;
 using Store.DAL.Database;
 using Store.DAL.Models;
@@ -41,6 +42,8 @@ public class StoreService : IStoreService
             throw new ArgumentException("Store not found.");
         }
     }
+    
+    
     
     public void Update(int storeId, UpdateStoreModel model)
     {

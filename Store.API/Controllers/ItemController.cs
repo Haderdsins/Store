@@ -3,6 +3,7 @@ using Store.BLL.Models.Cart;
 using Store.BLL.Models.Create;
 using Store.BLL.Models.Delete;
 using Store.BLL.Models.Other;
+using Store.BLL.Models.Search;
 using Store.BLL.Models.Update;
 using Store.BLL.Services.BatchOfProducts;
 using Store.DAL.Models;
@@ -95,6 +96,17 @@ namespace Store.API.Controllers
         return BadRequest($"Ой, что то пошло не так, продавец сказал только одну фразу: {ex.Message}");
       }
     }
+    /// <summary>
+    /// Найти, в каком магазине партия товаров (набор товар-количество) имеет наименьшую сумму.
+    /// </summary>
+    /// <param name="batchItems"></param>
+    [HttpPost("FindCheapestStoreForBatch")]
+    public IActionResult FindCheapestStoreForBatches([FromQuery] List<CheapestStoreModel> batchItems)
+    {
+      var cheapestStore = _batchOfProductServiceService.FindCheapestStoreForBatches(batchItems);
+      return Ok(cheapestStore);
+    }
+
   }  
 }
 

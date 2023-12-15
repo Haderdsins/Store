@@ -1,6 +1,7 @@
 ﻿using Store.BLL.Models.Cart;
 using Store.BLL.Models.Create;
 using Store.BLL.Models.Get;
+using Store.BLL.Models.Search;
 using Store.BLL.Models.Update;
 using Store.DAL.Models;
 
@@ -18,4 +19,6 @@ public interface IBatchOfProductService
     void Update(int itemId, UpdateItemModel model);
 
     decimal PurchaseItems(Dictionary<int, int> itemQuantities);
+    
+    Shop FindCheapestStoreForBatches(List<CheapestStoreModel> batchItems);
 }   

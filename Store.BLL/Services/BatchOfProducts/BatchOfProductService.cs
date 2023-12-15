@@ -1,5 +1,6 @@
 ﻿using Store.BLL.Models.Create;
 using Store.BLL.Models.Get;
+using Store.BLL.Models.Search;
 using Store.BLL.Models.Update;
 using Store.DAL.Database;
 using Store.DAL.Models;
@@ -103,6 +104,37 @@ public class BatchOfProductService : IBatchOfProductService
         return new GetItemsForAmountModel(result);
     }
     
+    public Shop FindCheapestStoreForBatches(List<CheapestStoreModel> batchItems)
+    {
+        var productIds = batchItems.Select(batchItem => batchItem.ProductId).ToList();
+
+        var cheapestStore = _dbContext.Items
+            .Where(item => productIds.Contains(item.ProductId))
+            .ToList() // Заменим AsEnumerable() на ToList() для выполнения части запроса на стороне сервера
+            .GroupBy(item => item.StoreId)
+            .Select(group => new
+            {
+                StoreId = group.Key,
+                TotalPrice = group.Sum(item => item.Price * item.Count * batchItems
+                    .Where(batchItem => batchItem.ProductId == item.ProductId)
+                    .Sum(batchItem => batchItem.BatchCount))
+            }).MinBy(result => result.TotalPrice);
+
+        if (cheapestStore != null)
+        {
+            return _dbContext.Stores.Find(cheapestStore.StoreId);
+        }
+
+        // Вывести отладочную информацию
+        Console.WriteLine("Product IDs: " + string.Join(", ", productIds));
+        Console.WriteLine("Cheapest store is null");
+
+        throw new Exception("No store found for the specified product batches.");
+    }
+
+
+
+    
     public decimal PurchaseItems(Dictionary<int, int> itemQuantities)
     {
         decimal totalCost = 0;
@@ -130,4 +162,5 @@ public class BatchOfProductService : IBatchOfProductService
 
         return totalCost;
     }
+    
 }
