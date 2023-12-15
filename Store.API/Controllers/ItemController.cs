@@ -101,7 +101,7 @@ namespace Store.API.Controllers
     /// </summary>
     /// <param name="batchItems"></param>
     [HttpPost("FindCheapestStoreForBatch")]
-    public IActionResult FindCheapestStoreForBatches([FromQuery] List<CheapestStoreModel> batchItems)
+    public IActionResult FindCheapestStoreForBatches([FromBody] List<CheapestStoreModel> batchItems)
     {
       var cheapestStore = _batchOfProductServiceService.FindCheapestStoreForBatches(batchItems);
       return Ok(cheapestStore);

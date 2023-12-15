@@ -20,5 +20,5 @@ public interface IBatchOfProductService
 
     decimal PurchaseItems(Dictionary<int, int> itemQuantities);
     
-    Shop FindCheapestStoreForBatches(List<CheapestStoreModel> batchItems);
+    GetAllStoresModel FindCheapestStoreForBatches(List<CheapestStoreModel> batchItems);
 }   

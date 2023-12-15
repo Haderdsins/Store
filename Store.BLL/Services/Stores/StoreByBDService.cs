@@ -7,11 +7,11 @@ using Store.DAL.Models;
 
 namespace Store.BLL.Services.Stores;
 
-public class StoreService : IStoreService
+public class StoreByBDService : IStoreService
 {
     private readonly StoreDbContext _dbContext;
 
-    public StoreService(StoreDbContext dbContext)
+    public StoreByBDService(StoreDbContext dbContext)
     {
         _dbContext = dbContext;
     }

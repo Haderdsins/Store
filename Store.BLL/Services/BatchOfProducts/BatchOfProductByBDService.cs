@@ -7,10 +7,10 @@ using Store.DAL.Models;
 
 namespace Store.BLL.Services.BatchOfProducts;
 
-public class BatchOfProductService : IBatchOfProductService
+public class BatchOfProductByBDService : IBatchOfProductService
 {
     private readonly StoreDbContext _dbContext;
-    public BatchOfProductService(StoreDbContext dbContext)
+    public BatchOfProductByBDService(StoreDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -103,25 +103,73 @@ public class BatchOfProductService : IBatchOfProductService
         return new GetItemsForAmountModel(result);
     }
     
-    public Shop FindCheapestStoreForBatches(List<CheapestStoreModel> batchItems)
+    public GetAllStoresModel FindCheapestStoreForBatches(List<CheapestStoreModel> model)
     {
-        var cheapestStore = _dbContext.Items
-            .Where(item => batchItems.Any(batchItem => batchItem.ProductId == item.ProductId))
-            .GroupBy(item => item.StoreId)
-            .Select(group => new
-            {
-                StoreId = group.Key,
-                TotalPrice = group.Sum(item => item.Price * item.Count * batchItems.First(batchItem => batchItem.ProductId == item.ProductId).BatchCount)
-            })
-            .OrderBy(result => result.TotalPrice)
-            .FirstOrDefault();
+        var array = new List<int>(); // хранятся StoreIds
 
-        if (cheapestStore == null)
+        for (var i = 0; i < model.Count; i++)
         {
-            throw new Exception("No store found for the specified product batches.");
+            var storeIds = _dbContext.Items
+                .Where(x => 
+                    x.ProductId == model[i].ProductId && 
+                    x.Count >= model[i].BatchCount)
+                .Select(x => x.StoreId)
+                .ToList();
+
+            if (i == 0)
+            {
+                array = storeIds;
+            }
+            else
+            {
+                array = array.Intersect(storeIds).ToList();
+            }
         }
+        // array - 5 6, это ids
+        var minTotalPrice = decimal.MaxValue;
         
-        return _dbContext.Stores.Find(cheapestStore.StoreId);
+        var cheapestStoreId = 0;
+
+        foreach (var storeId in array)
+        {
+            // 5
+            var allStoreProducts = _dbContext.Items
+                .Where(x => x.StoreId == storeId)
+                .ToList();
+
+            // ручка, тетрадь, бумага
+            decimal totalBatchPrice = 0;
+
+            // items - ручка и тетрадь + их кол-во
+            foreach (var item in model)
+            {
+                // тетрадь
+                var product = allStoreProducts
+                    .FirstOrDefault(x => x.ProductId == item.ProductId);
+                
+                totalBatchPrice += product!.Price * item.BatchCount;
+            }
+
+            if (totalBatchPrice < minTotalPrice)
+            {
+                minTotalPrice = totalBatchPrice;
+                cheapestStoreId = storeId;
+            }
+        }
+
+        if (cheapestStoreId == 0)
+        {
+            throw new ArgumentException("Error!");
+        }
+
+        var cheapestStore = _dbContext.Stores
+            .FirstOrDefault(x => x.Id == cheapestStoreId);
+        return new GetAllStoresModel
+        {
+            Id=cheapestStore.Id,
+            Name = cheapestStore.Name,
+            Address = cheapestStore.Address,
+        };
     }
 
 

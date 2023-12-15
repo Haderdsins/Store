@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Store.API.Extensions;
 using Store.BLL.Services.BatchOfProducts;
 using Store.BLL.Services.Products;
 using Store.BLL.Services.Stores;
@@ -8,17 +9,15 @@ using Store.DAL.Database;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
-
-
-builder.Services.AddScoped<IStoreService, StoreService>();
-builder.Services.AddScoped<IBatchOfProductService, BatchOfProductService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-
-
-
-
+builder.Services.AddScoped<IStoreService, StoreByBDService>();
+builder.Services.AddScoped<IBatchOfProductService, BatchOfProductByBDService>();
+builder.Services.AddScoped<IProductService, ProductByBDService>();
 builder.Services.AddControllers();
+
+
+builder.AddDAL(); 
+
+
 builder.Services.AddDbContext<StoreDbContext>(opt =>
 {
     opt.UseNpgsql("Host=localhost;Port=5432;Database=store_db;Username=postgres;Password=postgres");

@@ -6,11 +6,11 @@ using Store.DAL.Models;
 
 namespace Store.BLL.Services.Products;
 
-public class ProductService : IProductService
+public class ProductByBDService : IProductService
 {
     private readonly StoreDbContext _dbContext;
     
-    public ProductService(StoreDbContext dbContext)
+    public ProductByBDService(StoreDbContext dbContext)
     {
         _dbContext = dbContext;
     }
