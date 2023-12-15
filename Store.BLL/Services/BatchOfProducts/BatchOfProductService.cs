@@ -82,7 +82,6 @@ public class BatchOfProductService : IBatchOfProductService
 //TODO: добавить в получаемые переменнные productId, имзенить принцип расчета quantity, проверку на ноли и округление
     public GetItemsForAmountModel GetItemsForAmount(decimal amount)
     {
-        // Получаем все товары, цена которых не превышает заданную сумму и принадлежат указанному продукту
         var affordableItems = _dbContext.Items
             .Where(item => item.Price <= amount)
             .OrderBy(item => item.Price)
@@ -106,30 +105,23 @@ public class BatchOfProductService : IBatchOfProductService
     
     public Shop FindCheapestStoreForBatches(List<CheapestStoreModel> batchItems)
     {
-        var productIds = batchItems.Select(batchItem => batchItem.ProductId).ToList();
-
         var cheapestStore = _dbContext.Items
-            .Where(item => productIds.Contains(item.ProductId))
-            .ToList() // Заменим AsEnumerable() на ToList() для выполнения части запроса на стороне сервера
+            .Where(item => batchItems.Any(batchItem => batchItem.ProductId == item.ProductId))
             .GroupBy(item => item.StoreId)
             .Select(group => new
             {
                 StoreId = group.Key,
-                TotalPrice = group.Sum(item => item.Price * item.Count * batchItems
-                    .Where(batchItem => batchItem.ProductId == item.ProductId)
-                    .Sum(batchItem => batchItem.BatchCount))
-            }).MinBy(result => result.TotalPrice);
+                TotalPrice = group.Sum(item => item.Price * item.Count * batchItems.First(batchItem => batchItem.ProductId == item.ProductId).BatchCount)
+            })
+            .OrderBy(result => result.TotalPrice)
+            .FirstOrDefault();
 
-        if (cheapestStore != null)
+        if (cheapestStore == null)
         {
-            return _dbContext.Stores.Find(cheapestStore.StoreId);
+            throw new Exception("No store found for the specified product batches.");
         }
-
-        // Вывести отладочную информацию
-        Console.WriteLine("Product IDs: " + string.Join(", ", productIds));
-        Console.WriteLine("Cheapest store is null");
-
-        throw new Exception("No store found for the specified product batches.");
+        
+        return _dbContext.Stores.Find(cheapestStore.StoreId);
     }
 
 
