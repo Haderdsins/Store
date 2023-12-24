@@ -38,6 +38,7 @@ public class StoreController : ControllerBase
         _storeService.Delete(deleteStoreModel.StoreId);
     }
     
+    
     /// <summary>
     /// Обновление магазина
     /// </summary>

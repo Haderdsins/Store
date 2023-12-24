@@ -6,7 +6,6 @@ using Store.BLL.Models.Other;
 using Store.BLL.Models.Search;
 using Store.BLL.Models.Update;
 using Store.BLL.Services.BatchOfProducts;
-using Store.DAL.Models;
 
 namespace Store.API.Controllers
 {

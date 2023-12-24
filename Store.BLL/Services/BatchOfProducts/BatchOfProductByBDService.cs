@@ -52,7 +52,7 @@ public class BatchOfProductByBDService : IBatchOfProductService
             // Обновление атрибутов продукта
             itemToUpdate.ProductId = model.ProductId; 
             itemToUpdate.StoreId = model.StoreId;
-            itemToUpdate.Count = model.Count;
+            itemToUpdate.Count += model.Count;
             itemToUpdate.Price = model.Price;
             _dbContext.SaveChanges();
         }
